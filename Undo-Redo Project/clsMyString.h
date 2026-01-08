@@ -1,0 +1,50 @@
+#pragma once
+
+#include <iostream>
+#include <stack>
+using namespace std;
+
+class clsMyString
+{
+private:
+
+	string _Value = "";
+	stack<string> _UndoStack;
+	stack<string> _RedoStack;
+
+public:
+
+	void setValue(string Value)
+	{
+		_UndoStack.push(_Value);
+		_Value = Value;
+	}
+
+	string getValue()
+	{
+		return _Value;
+	}
+
+	__declspec(property(get = getValue, put = setValue))string Value;
+
+	void Undo()
+	{
+		if(!_UndoStack.empty())
+		{
+			_RedoStack.push(_Value);
+			_Value = _UndoStack.top();
+			_UndoStack.pop();
+		}
+	}
+
+	void Redo()
+	{
+		if (!_RedoStack.empty())
+		{
+			_UndoStack.push(_Value);
+			_Value = _RedoStack.top();
+			_RedoStack.pop();
+		}
+	}
+
+};
